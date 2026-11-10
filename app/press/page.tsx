@@ -1,7 +1,11 @@
-import type { Metadata } from "next";
 import Link from "next/link";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = { title: "Press" };
+export const metadata = createPageMetadata({
+  title: "Press",
+  description: "Contact the 99 Crib team in Lagos for press and media enquiries about student accommodation in Nigeria.",
+  path: "/press",
+});
 
 export default function PressPage() {
   return (

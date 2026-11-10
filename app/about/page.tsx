@@ -1,9 +1,13 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import { Building2, Check, LockKeyhole, Video } from "lucide-react";
 import DownloadBanner from "@/components/DownloadBanner";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = { title: "About Us" };
+export const metadata = createPageMetadata({
+  title: "About Us",
+  description: "Learn why 99 Crib helps Nigerian students explore real accommodation listings and protect rent payments until move-in is confirmed.",
+  path: "/about",
+});
 
 export default function AboutPage() {
   return (

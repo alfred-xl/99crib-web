@@ -1,9 +1,13 @@
-import type { Metadata } from "next";
 import { Info } from "lucide-react";
 import DownloadBanner from "@/components/DownloadBanner";
 import HowItWorksSteps from "@/components/HowItWorksSteps";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = { title: "How It Works" };
+export const metadata = createPageMetadata({
+  title: "How It Works",
+  description: "See how students find inspected accommodation and landlords list properties with 99 Crib, from verification through move-in confirmation.",
+  path: "/how-it-works",
+});
 
 export default function HowItWorksPage() {
   return (

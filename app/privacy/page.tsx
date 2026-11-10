@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Privacy Policy" };
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "99 Crib Privacy Policy. The full policy is being prepared.",
+  robots: { index: false },
+};
 
 export default function PrivacyPage() {
   return (

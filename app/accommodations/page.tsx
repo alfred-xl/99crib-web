@@ -1,12 +1,16 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 import { Info, MapPin } from "lucide-react";
 import { Suspense } from "react";
 import DownloadBanner from "@/components/DownloadBanner";
 import ListingCard from "@/components/ListingCard";
 import { listings } from "@/data/listings";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = { title: "Accommodations" };
+export const metadata = createPageMetadata({
+  title: "Accommodations",
+  description: "Browse sample student accommodation listings near Nigerian universities. Filter by university, room type, or annual price.",
+  path: "/accommodations",
+});
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 

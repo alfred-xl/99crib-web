@@ -1,9 +1,13 @@
-import type { Metadata } from "next";
 import { Mail, MapPin, Phone } from "lucide-react";
 import ContactForm from "@/components/ContactForm";
 import DownloadBanner from "@/components/DownloadBanner";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = { title: "Contact Us" };
+export const metadata = createPageMetadata({
+  title: "Contact Us",
+  description: "Contact 99 Crib about student support, property listings, partnerships, or press. Reach our team by email or phone in Lagos, Nigeria.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

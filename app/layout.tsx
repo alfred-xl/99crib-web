@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { siteUrl } from "./seo";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -10,6 +11,7 @@ const jakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: {
     default: "99 Crib | Verified student accommodation in Nigeria",
     template: "%s | 99 Crib",

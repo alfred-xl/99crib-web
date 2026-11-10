@@ -1,6 +1,10 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = { title: "Cookie Policy", robots: { index: false } };
+export const metadata: Metadata = {
+  title: "Cookie Policy",
+  description: "99 Crib is finalising its Cookie Policy. Contact the team with questions in the meantime.",
+  robots: { index: false },
+};
 
 export default function CookiesPage() {
   return (

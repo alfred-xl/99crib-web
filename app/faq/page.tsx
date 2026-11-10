@@ -1,8 +1,12 @@
-import type { Metadata } from "next";
 import FaqSection from "@/components/FaqSection";
 import DownloadBanner from "@/components/DownloadBanner";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = { title: "FAQ" };
+export const metadata = createPageMetadata({
+  title: "FAQ",
+  description: "Find answers about property verification, escrow payments, cancellations, video reels, and student accommodation near Nigerian universities.",
+  path: "/faq",
+});
 
 export default function FaqPage() {
   return (

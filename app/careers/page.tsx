@@ -1,6 +1,10 @@
-import type { Metadata } from "next";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = { title: "Careers" };
+export const metadata = createPageMetadata({
+  title: "Careers",
+  description: "Interested in working with 99 Crib? Contact the team to tell us how you would like to help make student accommodation safer.",
+  path: "/careers",
+});
 
 export default function CareersPage() {
   return (

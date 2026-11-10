@@ -1,7 +1,11 @@
-import type { Metadata } from "next";
 import DownloadBanner from "@/components/DownloadBanner";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = { title: "List a Property" };
+export const metadata = createPageMetadata({
+  title: "List a Property",
+  description: "List student accommodation for free on 99 Crib. Learn how property verification, photos, video reels, and move-in payment work.",
+  path: "/landlords",
+});
 
 export default function LandlordsPage() {
   return (

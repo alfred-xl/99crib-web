@@ -1,7 +1,11 @@
-import type { Metadata } from "next";
 import DownloadBanner from "@/components/DownloadBanner";
+import { createPageMetadata } from "../seo";
 
-export const metadata: Metadata = { title: "Safety & Verification" };
+export const metadata = createPageMetadata({
+  title: "Safety & Verification",
+  description: "Learn how 99 Crib checks properties in person and protects student rent payments until move-in is confirmed.",
+  path: "/safety",
+});
 
 export default function SafetyPage() {
   return (
