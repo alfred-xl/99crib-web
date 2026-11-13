@@ -1,25 +1,45 @@
 "use client";
 
-import type { FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 
 export default function ContactForm() {
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [feedback, setFeedback] = useState("");
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-    const fullName = String(formData.get("fullName") ?? "");
-    const email = String(formData.get("email") ?? "");
-    const university = String(formData.get("university") ?? "");
-    const subject = String(formData.get("subject") ?? "");
-    const message = String(formData.get("message") ?? "");
+    const form = event.currentTarget;
+    setStatus("sending");
+    setFeedback("");
 
-    const emailSubject = `${subject} from ${fullName}`;
-    const emailBody = `Name: ${fullName}\nEmail: ${email}\nUniversity: ${university}\nMessage: ${message}`;
-    window.location.href = `mailto:support@99crib.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+    try {
+      const response = await fetch("/api/contact.php", {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+      const result: { success?: boolean; message?: string } = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "We could not send your message. Please try again.");
+      }
+
+      form.reset();
+      setStatus("success");
+      setFeedback(result.message || "Your message has been sent.");
+    } catch (error) {
+      setStatus("error");
+      setFeedback(error instanceof Error ? error.message : "We could not send your message. Please try again.");
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
+      <div className="absolute -left-[9999px]" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
       <div className="grid gap-5 sm:grid-cols-2">
         <div>
           <label htmlFor="fullName" className="block text-xs font-semibold uppercase tracking-wide text-gray-500">Full Name</label>
@@ -67,12 +87,14 @@ export default function ContactForm() {
         <textarea id="message" name="message" required rows={6} placeholder="Tell us what’s on your mind..." className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/15" />
       </div>
 
-      <button type="submit" className="mt-5 w-full rounded-xl bg-brand px-6 py-4 font-semibold text-white shadow-lg shadow-brand/20 transition-colors hover:bg-brand-dark">
-        Send Message
+      <button type="submit" disabled={status === "sending"} className="mt-5 w-full rounded-xl bg-brand px-6 py-4 font-semibold text-white shadow-lg shadow-brand/20 transition-colors hover:bg-brand-dark disabled:cursor-wait disabled:opacity-60">
+        {status === "sending" ? "Sending..." : "Send Message"}
       </button>
-      <p className="mt-3 text-center text-xs leading-relaxed text-gray-500">
-        This opens your email app with your message filled in. Send it from there.
-      </p>
+      {feedback && (
+        <p role="status" aria-live="polite" className={`mt-3 text-center text-sm ${status === "error" ? "text-red-600" : "text-green-700"}`}>
+          {feedback}
+        </p>
+      )}
     </form>
   );
 }
