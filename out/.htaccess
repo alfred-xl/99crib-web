@@ -1,0 +1,18 @@
+# 99 Crib static site (Next.js export) on Apache behind cPanel's nginx cache.
+
+# Don't show folder listings (e.g. /_next/static/chunks/).
+Options -Indexes
+
+<IfModule mod_headers.c>
+  # Pages and their data files must always be fresh. Each build renames the CSS/JS they
+  # point to, so a cached old page breaks the styling. "no-cache" also tells the nginx
+  # cache in front of Apache not to store them.
+  <FilesMatch "\.(html|txt|xml)$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # Build assets get a new filename whenever they change, so they can be cached for a year.
+  <If "%{REQUEST_URI} =~ m#^/_next/static/#">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </If>
+</IfModule>
