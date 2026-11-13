@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteUrl } from "./seo";
 import "./globals.css";
+import "./legal.css";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-jakarta",
@@ -23,7 +24,10 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={jakarta.variable}>
-      <body className="flex min-h-screen flex-col font-sans text-navy antialiased">
+      <head>
+        <noscript><style>{`[data-reveal]{opacity:1!important;transform:none!important}`}</style></noscript>
+      </head>
+      <body suppressHydrationWarning className="flex min-h-screen flex-col font-sans text-navy antialiased">
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />

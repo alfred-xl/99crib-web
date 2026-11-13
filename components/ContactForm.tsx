@@ -20,21 +20,21 @@ export default function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="w-full">
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-5 sm:grid-cols-2">
         <div>
-          <label htmlFor="fullName" className="block text-sm font-semibold uppercase text-gray-500">Full Name</label>
-          <input id="fullName" name="fullName" type="text" required autoComplete="name" placeholder="Adaobi Okonkwo" className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20" />
+          <label htmlFor="fullName" className="block text-xs font-semibold uppercase tracking-wide text-gray-500">Full Name</label>
+          <input id="fullName" name="fullName" type="text" required autoComplete="name" placeholder="Adaobi Okonkwo" className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/15" />
         </div>
 
         <div>
-          <label htmlFor="email" className="block text-sm font-semibold uppercase text-gray-500">Email Address</label>
-          <input id="email" name="email" type="email" required autoComplete="email" placeholder="ada@university.edu.ng" className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20" />
+          <label htmlFor="email" className="block text-xs font-semibold uppercase tracking-wide text-gray-500">Email Address</label>
+          <input id="email" name="email" type="email" required autoComplete="email" placeholder="ada@university.edu.ng" className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/15" />
         </div>
       </div>
 
-      <div className="mt-6">
-        <label htmlFor="university" className="block text-sm font-semibold uppercase text-gray-500">University</label>
-        <select id="university" name="university" defaultValue="" className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20">
+      <div className="mt-5">
+        <label htmlFor="university" className="block text-xs font-semibold uppercase tracking-wide text-gray-500">University</label>
+        <select id="university" name="university" defaultValue="" className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/15">
           <option value="">Select your university (optional)</option>
           <option value="University of Lagos (UNILAG)">University of Lagos (UNILAG)</option>
           <option value="Obafemi Awolowo University (OAU)">Obafemi Awolowo University (OAU)</option>
@@ -50,9 +50,9 @@ export default function ContactForm() {
         </select>
       </div>
 
-      <div className="mt-6">
-        <label htmlFor="subject" className="block text-sm font-semibold uppercase text-gray-500">Subject</label>
-        <select id="subject" name="subject" required defaultValue="" className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20">
+      <div className="mt-5">
+        <label htmlFor="subject" className="block text-xs font-semibold uppercase tracking-wide text-gray-500">Subject</label>
+        <select id="subject" name="subject" required defaultValue="" className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/15">
           <option value="">Select a topic</option>
           <option value="General enquiry">General enquiry</option>
           <option value="Listing my property">Listing my property</option>
@@ -62,15 +62,15 @@ export default function ContactForm() {
         </select>
       </div>
 
-      <div className="mt-6">
-        <label htmlFor="message" className="block text-sm font-semibold uppercase text-gray-500">Message</label>
-        <textarea id="message" name="message" required rows={6} placeholder="Tell us what’s on your mind..." className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-5 py-4 outline-none focus:border-brand focus:ring-2 focus:ring-brand/20" />
+      <div className="mt-5">
+        <label htmlFor="message" className="block text-xs font-semibold uppercase tracking-wide text-gray-500">Message</label>
+        <textarea id="message" name="message" required rows={6} placeholder="Tell us what’s on your mind..." className="mt-2 w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3.5 text-sm outline-none transition-colors focus:border-brand focus:ring-2 focus:ring-brand/15" />
       </div>
 
-      <button type="submit" className="mt-6 w-full rounded-xl bg-brand px-6 py-4 text-lg font-semibold text-white shadow-lg shadow-brand/20 hover:bg-brand-dark">
+      <button type="submit" className="mt-5 w-full rounded-xl bg-brand px-6 py-4 font-semibold text-white shadow-lg shadow-brand/20 transition-colors hover:bg-brand-dark">
         Send Message
       </button>
-      <p className="mt-3 text-center text-sm text-gray-500">
+      <p className="mt-3 text-center text-xs leading-relaxed text-gray-500">
         This opens your email app with your message filled in. Send it from there.
       </p>
     </form>

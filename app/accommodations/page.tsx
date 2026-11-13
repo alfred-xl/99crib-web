@@ -1,36 +1,36 @@
-import { MapPin } from "lucide-react";
 import { Suspense } from "react";
+import { MapPin } from "lucide-react";
 import DownloadBanner from "@/components/DownloadBanner";
 import { createPageMetadata } from "../seo";
 import ListingsSection from "./ListingsSection";
 
 export const metadata = createPageMetadata({
-  title: "Accommodations",
-  description: "Browse sample student accommodation listings near Nigerian universities. Filter by university, room type, or annual price.",
+  title: "Browse Student Accommodations",
+  description: "Browse verified student rooms, self-contains and hostels near universities across Nigeria. Filter by university, room type and price.",
   path: "/accommodations",
 });
 
 export default function AccommodationsPage() {
   return (
-    <>
-      <section className="bg-brand px-5 py-24 text-center text-white md:px-8">
-        <div className="mx-auto max-w-7xl">
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-5 py-2 text-sm font-medium">
-            <MapPin aria-hidden="true" size={18} />
-            Sample listings near campus
-          </p>
-          <h1 className="mt-8 text-3xl font-bold sm:text-4xl md:text-6xl">Browse Accommodations</h1>
-          <p className="mx-auto mt-6 max-w-3xl text-lg text-white/85 md:text-xl">
-            Filter by your university to see what&apos;s available near you. Sample listings are shown while we prepare our live catalogue.
+    <div className="min-h-screen">
+      <section className="bg-linear-to-br from-brand to-[#1a35d4] px-5 py-20 text-white">
+        <div className="mx-auto max-w-3xl text-center">
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-white/15 px-4 py-1.5 text-sm font-medium">
+            <MapPin aria-hidden="true" className="h-4 w-4" />
+            Verified listings across Nigeria
+          </div>
+          <h1 className="mb-5 text-4xl font-bold leading-tight lg:text-5xl">Browse Accommodations</h1>
+          <p className="text-lg leading-relaxed text-white/75">
+            Browse rooms near your university and open each listing for available photos, amenities and pricing information.
           </p>
         </div>
       </section>
 
-      <Suspense fallback={<section className="bg-white px-5 py-24" />}>
+      <Suspense fallback={<section className="mx-auto max-w-7xl px-5 py-8 lg:px-8" aria-label="Loading listings" />}>
         <ListingsSection />
       </Suspense>
 
       <DownloadBanner />
-    </>
+    </div>
   );
 }

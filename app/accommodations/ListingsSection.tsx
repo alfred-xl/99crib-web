@@ -1,147 +1,131 @@
 "use client";
 
 import Link from "next/link";
-import { Info } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import SortSelect from "@/components/accommodations/SortSelect";
 import ListingCard from "@/components/ListingCard";
 import { listings } from "@/data/listings";
+import { useSearchParams } from "next/navigation";
+import { Search } from "lucide-react";
+import Reveal from "@/components/Reveal";
+
+const selectClass = "w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-navy transition-colors focus:outline-none focus:border-brand focus:ring-2 focus:ring-brand/15";
+const roomTypeOrder = ["Bed Space", "Single Room", "Shared Room", "En-suite Room", "Mini Flat"];
+const roomTypes = roomTypeOrder.filter((type) => listings.some((listing) => listing.roomType === type));
+const universities = Array.from(new Set(listings.map((listing) => listing.university))).sort((a, b) =>
+  listings.filter((listing) => listing.university === b).length - listings.filter((listing) => listing.university === a).length,
+);
+
+function singleValue(params: Pick<URLSearchParams, "getAll">, name: string) {
+  const values = params.getAll(name);
+  return values.length === 1 ? values[0] : "";
+}
 
 export default function ListingsSection() {
-  const searchParams = useSearchParams();
-  const universityValues = searchParams.getAll("university");
-  const typeValues = searchParams.getAll("type");
-  const priceValues = searchParams.getAll("price");
-  const university = universityValues.length === 1 ? universityValues[0] : "";
-  const type = typeValues.length === 1 ? typeValues[0] : "";
-  const rawPrice = priceValues.length === 1 ? priceValues[0] : "";
-  const priceRange = ["under-350000", "350000-500000", "over-500000"].includes(rawPrice) ? rawPrice : "";
-  const results = listings.filter((listing) => {
-    const matchesPrice =
-      !priceRange ||
-      (priceRange === "under-350000" && listing.annualPrice < 350000) ||
-      (priceRange === "350000-500000" && listing.annualPrice >= 350000 && listing.annualPrice <= 500000) ||
-      (priceRange === "over-500000" && listing.annualPrice > 500000);
+  const params = useSearchParams();
+  const rawUniversity = singleValue(params, "university");
+  const rawType = singleValue(params, "type");
+  const rawPrice = singleValue(params, "price");
+  const rawSort = singleValue(params, "sort");
+  const university = universities.includes(rawUniversity) ? rawUniversity : "";
+  const type = roomTypes.includes(rawType) ? rawType : "";
+  const price = ["0", "1", "2", "3", "4", "5"].includes(rawPrice) ? rawPrice : "0";
+  const sort = ["low", "high"].includes(rawSort) ? rawSort : "";
+  const formKey = JSON.stringify([university, type, price, sort]);
 
-    return (
-      (!university || listing.university === university) &&
-      (!type || listing.type === type) &&
-      matchesPrice
-    );
-  });
+  const results = listings
+    .filter((listing) => {
+      if (!listing.verified) return false;
+      if (university && listing.university !== university) return false;
+      if (type && listing.roomType !== type) return false;
+      if (price === "0") return true;
+      const value = listing.price?.value;
+      if (value == null) return false;
+      if (price === "1") return value < 500000;
+      if (price === "2") return value >= 500000 && value < 1000000;
+      if (price === "3") return value >= 1000000 && value < 2000000;
+      if (price === "4") return value >= 2000000 && value <= 3000000;
+      return value > 3000000;
+    })
+    .sort((a, b) => {
+      if (!sort) return a.id - b.id;
+      const aPrice = a.price?.value;
+      const bPrice = b.price?.value;
+      if (aPrice == null) return bPrice == null ? a.id - b.id : 1;
+      if (bPrice == null) return -1;
+      return (sort === "low" ? aPrice - bPrice : bPrice - aPrice) || a.id - b.id;
+    });
+  const universityShort = listings.find((listing) => listing.university === university)?.universityShort;
 
   return (
-    <section className="bg-white px-5 py-16 md:px-8">
-      <div className="mx-auto max-w-7xl">
-        <form
-          key={JSON.stringify([university, type, priceRange])}
-          action="/accommodations"
-          method="get"
-          className="grid gap-4 rounded-2xl border border-gray-200 bg-white p-5 shadow-sm md:grid-cols-2 xl:grid-cols-4"
-        >
+    <section className="mx-auto max-w-7xl px-5 py-8 lg:px-8" id="listings">
+      <form key={`filters-${formKey}`} method="get" action="/accommodations/#listings" className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+        {sort && <input type="hidden" name="sort" value={sort} />}
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
-            <label htmlFor="university" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-500">University</label>
-            <select
-              id="university"
-              name="university"
-              defaultValue={university}
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-navy"
-            >
+            <label htmlFor="f-university" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-500">University</label>
+            <select id="f-university" name="university" defaultValue={university} className={selectClass}>
               <option value="">All universities</option>
-              <option value="University of Lagos (UNILAG)">University of Lagos (UNILAG)</option>
-              <option value="Obafemi Awolowo University (OAU)">Obafemi Awolowo University (OAU)</option>
-              <option value="University of Ibadan (UI)">University of Ibadan (UI)</option>
-              <option value="ABU Zaria">ABU Zaria</option>
-              <option value="University of Benin (UNIBEN)">University of Benin (UNIBEN)</option>
-              <option value="University of Nigeria, Nsukka (UNN)">University of Nigeria, Nsukka (UNN)</option>
-              <option value="Covenant University">Covenant University</option>
-              <option value="Babcock University">Babcock University</option>
-              <option value="University of Port Harcourt (UNIPORT)">University of Port Harcourt (UNIPORT)</option>
-              <option value="Lagos State University (LASU)">Lagos State University (LASU)</option>
+              {universities.map((option) => <option key={option} value={option}>{option}</option>)}
             </select>
           </div>
-
           <div>
-            <label htmlFor="type" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-500">Room type</label>
-            <select
-              id="type"
-              name="type"
-              defaultValue={type}
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-navy"
-            >
+            <label htmlFor="f-type" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-500">Room Type</label>
+            <select id="f-type" name="type" defaultValue={type} className={selectClass}>
               <option value="">All types</option>
-              <option value="Self-Contain">Self-Contain</option>
-              <option value="Single Room">Single Room</option>
-              <option value="Shared Room">Shared Room</option>
-              <option value="Mini Flat">Mini Flat</option>
-              <option value="2 Bedroom">2 Bedroom</option>
-              <option value="Hostel">Hostel</option>
+              {roomTypes.map((option) => <option key={option} value={option}>{option}</option>)}
             </select>
           </div>
-
           <div>
-            <label htmlFor="price" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-500">Price range</label>
-            <select
-              id="price"
-              name="price"
-              defaultValue={priceRange}
-              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-navy"
-            >
-              <option value="">Any price</option>
-              <option value="under-350000">Under ₦350,000/yr</option>
-              <option value="350000-500000">₦350,000–₦500,000/yr</option>
-              <option value="over-500000">Over ₦500,000/yr</option>
+            <label htmlFor="f-price" className="mb-2 block text-xs font-semibold uppercase tracking-wide text-gray-500">Price Range</label>
+            <select id="f-price" name="price" defaultValue={price} className={selectClass}>
+              <option value="0">Any price</option>
+              <option value="1">Under ₦500,000</option>
+              <option value="2">₦500,000 – ₦1,000,000</option>
+              <option value="3">₦1,000,000 – ₦2,000,000</option>
+              <option value="4">₦2,000,000 – ₦3,000,000</option>
+              <option value="5">Above ₦3,000,000</option>
             </select>
           </div>
-
-          <div className="flex items-end">
-            <button type="submit" className="w-full rounded-xl bg-brand px-6 py-3 font-semibold text-white hover:bg-brand-dark">
-              Search
-            </button>
+          <div className="flex flex-col justify-end gap-2">
+            <button type="submit" className="w-full rounded-xl bg-brand py-3 text-sm font-semibold text-white shadow-md shadow-brand/20 transition-colors hover:bg-brand-dark">Search</button>
           </div>
+        </div>
+      </form>
+
+      <div className="mb-5 mt-6 flex flex-wrap items-center justify-between gap-3">
+        <p className="text-sm text-gray-500" aria-live="polite">
+          <span className="font-semibold text-navy">{results.length}</span> verified {results.length === 1 ? "listing" : "listings"} {universityShort ? `near ${universityShort}` : "across Nigeria"}
+        </p>
+        <form key={`sort-${formKey}`} method="get" action="/accommodations/#listings" className="flex items-center gap-2">
+          {university && <input type="hidden" name="university" value={university} />}
+          {type && <input type="hidden" name="type" value={type} />}
+          {price !== "0" && <input type="hidden" name="price" value={price} />}
+          <label htmlFor="f-sort" className="text-xs font-semibold uppercase tracking-wide text-gray-500">Sort</label>
+          <SortSelect defaultValue={sort} />
+          <noscript><button type="submit" className="text-sm font-semibold text-brand">Apply</button></noscript>
         </form>
-
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-          <p className="text-gray-500">
-            <span className="font-bold text-navy">{results.length}</span> sample {results.length === 1 ? "listing" : "listings"}
-          </p>
-          <div className="flex flex-wrap items-center gap-4">
-            {(university || type || priceRange) && (
-              <Link href="/accommodations" className="text-sm font-semibold text-brand hover:text-brand-dark">
-                Clear filters
-              </Link>
-            )}
-            <span className="inline-flex items-center gap-2 rounded-full border border-brand/15 bg-brand-light px-3 py-1 text-sm text-brand">
-              <Info aria-hidden="true" size={16} />
-              Sample previews · live catalogue coming soon
-            </span>
-          </div>
-        </div>
-
-        {results.length > 0 ? (
-          <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {results.map((listing) => (
-              <ListingCard key={listing.title} listing={listing} featured />
-            ))}
-          </div>
-        ) : (
-          <div className="mt-6 rounded-2xl border border-gray-100 bg-section p-10 text-center">
-            <p>No sample listings match those filters yet.</p>
-            <Link href="/accommodations" className="mt-4 inline-block font-semibold text-brand hover:text-brand-dark">
-              See all listings
-            </Link>
-          </div>
-        )}
-
-        <div className="mt-20 rounded-3xl bg-brand-light px-6 py-12 text-center">
-          <h2 className="text-2xl font-bold md:text-3xl">Explore more homes in the app</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-gray-500">
-            Browse property details, photos, and video reels in the 99 Crib app.
-          </p>
-          <Link href="#download" className="mt-8 inline-flex rounded-xl bg-brand px-7 py-3 font-semibold text-white hover:bg-brand-dark">
-            Get the App to Browse
-          </Link>
-        </div>
       </div>
+
+      {results.length > 0 ? (
+        <div className="grid grid-cols-1 gap-5 pb-16 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {results.map((listing) => <ListingCard key={listing.slug} listing={listing} />)}
+        </div>
+      ) : (
+        <div className="py-20 text-center">
+          <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
+            <Search aria-hidden="true" className="h-8 w-8 text-gray-400" strokeWidth={1.5} />
+          </div>
+          <h2 className="mb-2 text-lg font-semibold text-navy">No listings found</h2>
+          <p className="mb-5 text-sm text-gray-500">Try adjusting your filters. We&apos;re adding new universities and listings regularly.</p>
+          <Link href="/accommodations/#listings" className="text-sm font-semibold text-brand hover:underline">Clear filters</Link>
+        </div>
+      )}
+
+      <Reveal><div className="mb-8 rounded-2xl bg-brand-light p-8 text-center">
+        <h2 className="mb-2 text-xl font-bold text-navy">Found a place you like? Book it in the app</h2>
+        <p className="mb-6 text-sm text-gray-500">Reserve your room, pay into escrow and track your move-in, all inside the 99 Crib app.</p>
+        <a href="#download" className="inline-flex items-center gap-2 rounded-xl bg-brand px-7 py-3.5 font-semibold text-white shadow-lg shadow-brand/25 transition-colors hover:bg-brand-dark">Get the App to Book</a>
+      </div></Reveal>
     </section>
   );
 }

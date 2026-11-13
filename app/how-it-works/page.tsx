@@ -12,16 +12,16 @@ export const metadata = createPageMetadata({
 export default function HowItWorksPage() {
   return (
     <>
-      <section className="bg-brand px-5 py-24 text-center text-white md:px-8">
-        <div className="mx-auto max-w-7xl">
-          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-5 py-2 text-sm font-medium text-white">
+      <section className="bg-brand px-5 py-20 text-center text-white lg:px-8">
+        <div className="mx-auto max-w-3xl">
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/15 px-4 py-1.5 text-sm font-medium text-white">
             <Info aria-hidden="true" size={18} />
             How 99 Crib works
           </p>
-          <h1 className="mx-auto mt-8 max-w-5xl text-4xl font-bold md:text-6xl">
+          <h1 className="mx-auto mt-6 text-4xl font-bold leading-tight lg:text-5xl">
             Simple, safe, and transparent from start to finish
           </h1>
-          <p className="mx-auto mt-8 max-w-3xl text-lg text-white/85 md:text-xl">
+          <p className="mx-auto mt-5 text-lg leading-relaxed text-white/85">
             Whether you&apos;re a student looking for a verified home near campus or a landlord wanting reliable tenants, 99 Crib makes the process straightforward and secure.
           </p>
         </div>

@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import useEmblaCarousel from "embla-carousel-react";
 import { useEffect, useState, type ReactNode } from "react";
 
-export default function FeaturedListingsCarousel({ children }: { children: ReactNode }) {
+export default function FeaturedListingsCarousel({ children, label = "Featured listings" }: { children: ReactNode; label?: string }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ align: "start", containScroll: "trimSnaps" });
   const [selectedSnap, setSelectedSnap] = useState(0);
   const [snapCount, setSnapCount] = useState(0);
@@ -32,7 +32,7 @@ export default function FeaturedListingsCarousel({ children }: { children: React
   }, [emblaApi]);
 
   return (
-    <div role="region" aria-roledescription="carousel" aria-label="Featured sample listings">
+    <div role="region" aria-roledescription="carousel" aria-label={label}>
       <div ref={emblaRef} className="overflow-hidden">
         <div className="-ml-5 flex touch-pan-y touch-pinch-zoom">{children}</div>
       </div>

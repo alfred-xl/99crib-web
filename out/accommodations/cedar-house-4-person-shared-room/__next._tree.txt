@@ -1,0 +1,6 @@
+:HL["/_next/static/chunks/0xwypazbdg_4u.css","style"]
+:HL["/_next/static/media/d8aeca813a9ab546-s.p.18rizl4rsrl42.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
+3:[["children",{"s":"__PAGE__","h":160}]]
+2:[["children",{"s":{"n":"slug","t":"d","k":"cedar-house-4-person-shared-room","s":[]},"h":65632,"c":"$Q3"}]]
+1:[["children",{"s":"accommodations","h":131136,"c":"$Q2"}]]
+0:{"b":"FqT6MWOGS3lkPPfBynSnX","t":{"t":{"s":"","h":131088,"c":"$Q1"}}}

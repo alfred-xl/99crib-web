@@ -9,11 +9,13 @@ export function createPageMetadata({
   description,
   path,
   absoluteTitle = false,
+  image,
 }: {
   title: string;
   description: string;
   path: string;
   absoluteTitle?: boolean;
+  image?: { url: string; alt: string };
 }): Metadata {
   const socialTitle = absoluteTitle ? title : `${title} | 99 Crib`;
 
@@ -29,7 +31,7 @@ export function createPageMetadata({
       locale: "en_NG",
       type: "website",
       images: [
-        {
+        image ?? {
           url: socialImage,
           width: 1920,
           height: 1080,
@@ -41,7 +43,7 @@ export function createPageMetadata({
       card: "summary_large_image",
       title: socialTitle,
       description,
-      images: [socialImage],
+      images: [image?.url ?? socialImage],
     },
   };
 }
