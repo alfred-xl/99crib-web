@@ -1,6 +1,6 @@
-:HL["/_next/static/chunks/0xwypazbdg_4u.css","style"]
+:HL["/_next/static/chunks/0g6-o7hhhj0rx.css","style"]
 :HL["/_next/static/media/d8aeca813a9ab546-s.p.18rizl4rsrl42.woff2","font",{"crossOrigin":"","type":"font/woff2"}]
 3:[["children",{"s":"__PAGE__","h":160}]]
 2:[["children",{"s":{"n":"slug","t":"d","k":"oldbrookes-hostel-shared-room","s":[]},"h":65632,"c":"$Q3"}]]
 1:[["children",{"s":"accommodations","h":131136,"c":"$Q2"}]]
-0:{"b":"_RuFSMgtrpcYE74QA2soD","t":{"t":{"s":"","h":131088,"c":"$Q1"}}}
+0:{"b":"qtzzc7s6ut4WcAydTSAHj","t":{"t":{"s":"","h":131088,"c":"$Q1"}}}

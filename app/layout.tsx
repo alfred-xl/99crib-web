@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import Script from "next/script";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { siteUrl } from "./seo";
@@ -31,6 +32,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        {/* 99 Crib AI chatbot (floating bubble, bottom-right). Loads after the page so it never slows it down. */}
+        <Script
+          id="99crib-chatbot"
+          src="https://ai.99crib.com/vendor/chatbot/js/external-chatbot.js"
+          strategy="lazyOnload"
+          data-chatbot-uuid="9eb906ac-b9a8-48ea-a148-8aa444fb589b"
+          data-iframe-width="420"
+          data-iframe-height="745"
+          data-language="en"
+        />
       </body>
     </html>
   );
