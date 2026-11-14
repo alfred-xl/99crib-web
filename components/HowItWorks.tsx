@@ -95,8 +95,8 @@ export default function HowItWorks() {
           {steps.map((step, index) => (
             <li key={`${audience}-${step.number}`} className="h-full"><Reveal delay={index * 80} className="h-full"><div className="group h-full rounded-2xl border border-gray-100 bg-gray-50 p-6 transition-all duration-[250ms] ease-[ease] hover:-translate-y-0.5 hover:border-brand/20 hover:bg-white hover:shadow-md">
               <span className="text-3xl font-extrabold leading-none text-gray-200 transition-colors group-hover:text-brand">{step.number}</span>
-              <h3 className="mt-3 text-sm font-bold leading-snug">{step.title}</h3>
-              <p className="mt-2 text-[13px] leading-relaxed text-gray-500">{step.description}</p>
+              <h3 className="mt-3 text-[15px] font-bold leading-snug">{step.title}</h3>
+              <p className="mt-2 text-[14px] leading-relaxed text-gray-500">{step.description}</p>
             </div></Reveal></li>
           ))}
         </ol>

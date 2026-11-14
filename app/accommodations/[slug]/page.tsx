@@ -114,15 +114,6 @@ export default async function AccommodationDetailPage({ params }: PageProps) {
           </div>
 
           <ListingGallery key={listing.slug} images={listing.images} property={listing.property} noPhotoNote={listing.noPhotoNote} />
-          {listing.video && (
-            <section aria-label={`${listing.property} video tour`} className="mt-6 overflow-hidden rounded-[1.25rem] border border-gray-200 bg-white p-6 sm:p-[1.9rem]">
-              <h2 className="mb-4 text-[1.2rem] font-extrabold text-navy">Video tour</h2>
-              <video controls preload="none" poster={listing.video.poster} className="aspect-video w-full rounded-2xl bg-black" aria-label={`Video tour of ${listing.room} at ${listing.property}`}>
-                <source src={listing.video.src} type="video/mp4" />
-                Your browser does not support this video.
-              </video>
-            </section>
-          )}
 
           <div className="mt-12 grid items-start gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:gap-10">
             <div className="min-w-0 space-y-8">
@@ -151,6 +142,16 @@ export default async function AccommodationDetailPage({ params }: PageProps) {
                   <p key={paragraph} className="mt-[0.9rem] text-[0.95rem] leading-[1.8] text-gray-600">{paragraph}</p>
                 ))}
               </section>
+
+              {listing.video && (
+                <section aria-label={`${listing.property} video tour`} className="overflow-hidden rounded-[1.25rem] border border-gray-200 bg-white p-6 sm:p-[1.9rem]">
+                  <h2 className="mb-4 text-[1.2rem] font-extrabold text-navy">Video tour</h2>
+                  <video controls preload="none" poster={listing.video.poster} className="aspect-video w-full rounded-2xl bg-black" aria-label={`Video tour of ${listing.room} at ${listing.property}`}>
+                    <source src={listing.video.src} type="video/mp4" />
+                    Your browser does not support this video.
+                  </video>
+                </section>
+              )}
 
               <section aria-labelledby="place-offers" className="rounded-[1.25rem] border border-gray-200 bg-white p-6 sm:p-[1.9rem]">
                 <h2 id="place-offers" className="mb-4 text-[1.2rem] font-extrabold text-navy">What this place offers</h2>

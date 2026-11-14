@@ -60,9 +60,9 @@ export default function Header() {
     return `${base} after:opacity-0 ${isSolid ? "text-gray-600 hover:text-brand" : "text-white/85 hover:text-white/90"}`;
   }
 
-  // Mobile menu: each link is centred with even spacing.
+  // Mobile menu: align each link to the left with even spacing.
   function mobileLinkClass(href: string) {
-    const base = "flex min-h-14 w-full items-center justify-center py-3 text-center text-lg transition-colors";
+    const base = "flex min-h-14 w-full items-center justify-start py-3 text-left text-lg transition-colors";
     return isActive(href) ? `${base} font-semibold text-brand` : `${base} font-medium text-navy hover:text-brand`;
   }
 
@@ -116,7 +116,7 @@ export default function Header() {
           </div>
           <div className="mx-auto grid w-full max-w-7xl flex-1 grid-rows-[minmax(0,1fr)_auto_minmax(0,1fr)] px-5 pb-8">
             <div aria-hidden="true" />
-            <div className="flex flex-col items-center gap-2">
+            <div className="flex flex-col items-start gap-2">
               {navLinks.map(({ href, label }) => (
                 <Link key={href} href={href} onClick={() => setMenuOpen(false)} aria-current={isActive(href) ? "page" : undefined} className={mobileLinkClass(href)}>{label}</Link>
               ))}
