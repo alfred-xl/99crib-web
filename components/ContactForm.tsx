@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import SuccessModal from "@/components/SuccessModal";
 
 export default function ContactForm() {
   const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
@@ -27,7 +28,6 @@ export default function ContactForm() {
 
       form.reset();
       setStatus("success");
-      setFeedback(result.message || "Your message has been sent.");
     } catch (error) {
       setStatus("error");
       setFeedback(error instanceof Error ? error.message : "We could not send your message. Please try again.");
@@ -90,11 +90,17 @@ export default function ContactForm() {
       <button type="submit" disabled={status === "sending"} className="mt-5 w-full rounded-xl bg-brand px-6 py-4 font-semibold text-white shadow-lg shadow-brand/20 transition-colors hover:bg-brand-dark disabled:cursor-wait disabled:opacity-60">
         {status === "sending" ? "Sending..." : "Send Message"}
       </button>
-      {feedback && (
-        <p role="status" aria-live="polite" className={`mt-3 text-center text-sm ${status === "error" ? "text-red-600" : "text-green-700"}`}>
+      {status === "error" && feedback && (
+        <p role="alert" className="mt-3 text-center text-sm text-red-600">
           {feedback}
         </p>
       )}
+      <SuccessModal
+        open={status === "success"}
+        title="Message sent"
+        message="Thanks for reaching out. We have your message and will reply to your email as soon as we can."
+        onClose={() => setStatus("idle")}
+      />
     </form>
   );
 }

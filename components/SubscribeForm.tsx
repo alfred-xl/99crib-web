@@ -2,26 +2,48 @@
 
 import { useState, type FormEvent } from "react";
 import { ArrowRight } from "lucide-react";
+import SuccessModal from "@/components/SuccessModal";
 
 // Footer newsletter sign-up.
-// The site is a static export with no backend, so (like the contact form) this opens the
-// visitor's email app with a subscribe request to support@99crib.com.
-// To use a newsletter service later (Mailchimp, Brevo, etc.), replace the mailto line with a
-// fetch() to that service's sign-up endpoint.
+// The site is a static export, so (like the contact form) this posts to a small PHP file,
+// public/api/subscribe.php, which saves the address to a private file on the server.
 export default function SubscribeForm() {
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [feedback, setFeedback] = useState("");
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const email = String(new FormData(event.currentTarget).get("email") ?? "").trim();
-    const subject = "Subscribe me to 99 Crib updates";
-    const body = `Please add ${email} to the 99 Crib mailing list.`;
-    window.location.href = `mailto:support@99crib.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setSent(true);
+
+    const form = event.currentTarget;
+    setStatus("sending");
+    setFeedback("");
+
+    try {
+      const response = await fetch("/api/subscribe.php", {
+        method: "POST",
+        body: new FormData(form),
+        headers: { Accept: "application/json" },
+      });
+      const result: { success?: boolean; message?: string } = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "We could not subscribe you. Please try again.");
+      }
+
+      form.reset();
+      setStatus("success");
+    } catch (error) {
+      setStatus("error");
+      setFeedback(error instanceof Error && error.message !== "Failed to fetch" ? error.message : "We could not subscribe you. Please try again.");
+    }
   }
 
   return (
     <form onSubmit={handleSubmit} className="mt-6">
+      <div className="absolute -left-[9999px]" aria-hidden="true">
+        <label htmlFor="footer-website">Website</label>
+        <input id="footer-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+      </div>
       <label htmlFor="footer-email" className="sr-only">Email address</label>
       <div className="flex flex-col gap-2 sm:flex-row lg:flex-col xl:flex-row">
         <input
@@ -35,14 +57,21 @@ export default function SubscribeForm() {
         />
         <button
           type="submit"
-          className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+          disabled={status === "sending"}
+          className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-xl bg-brand px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-brand-dark focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white disabled:cursor-not-allowed disabled:opacity-70"
         >
-          Subscribe <ArrowRight aria-hidden="true" size={16} />
+          {status === "sending" ? "Subscribing..." : <>Subscribe <ArrowRight aria-hidden="true" size={16} /></>}
         </button>
       </div>
-      <p className="mt-3 text-xs leading-relaxed text-white/50" aria-live="polite">
-        {sent ? "Your email app should open. Send the message to finish subscribing." : "Opens your email app to confirm. No spam, unsubscribe anytime."}
+      <p className={`mt-3 text-xs leading-relaxed ${status === "error" ? "text-red-400" : "text-white/50"}`} aria-live="polite">
+        {status === "error" && feedback ? feedback : "No spam. Unsubscribe anytime by emailing support@99crib.com."}
       </p>
+      <SuccessModal
+        open={status === "success"}
+        title="You're subscribed"
+        message="Thanks for joining. New verified listings and campus housing tips will land in your inbox."
+        onClose={() => setStatus("idle")}
+      />
     </form>
   );
 }
