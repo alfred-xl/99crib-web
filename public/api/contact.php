@@ -72,6 +72,13 @@ if (
 // For /home/USER/public_html/api/contact.php this is /home/USER/99crib-mail.
 $privateDirectory = dirname(__DIR__, 2) . '/99crib-mail';
 
+// TEMPORARY: while the whole repository is deployed into the document root, this file is
+// served from /home/USER/public_html/out/api/, one level deeper, so the private directory
+// is three levels up. Remove this block once only the contents of out/ are deployed.
+if (!is_readable($privateDirectory . '/config.php') && basename(dirname(__DIR__)) === 'out') {
+    $privateDirectory = dirname(__DIR__, 3) . '/99crib-mail';
+}
+
 try {
     $autoload = $privateDirectory . '/vendor/autoload.php';
     $configFile = $privateDirectory . '/config.php';
